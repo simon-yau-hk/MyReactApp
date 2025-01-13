@@ -1,16 +1,6 @@
 pipeline {
     agent any
-        // Define parameters
-    properties([
-        parameters([
-            choice(
-                choices: ['development', 'uat', 'production'], 
-                name: 'DEPLOY_ENV',
-                defaultValue: 'production', 
-                description: 'Deploy environment'
-            )
-        ])
-    ])
+
 
     environment {
         DOCKER_IMAGE = 'my-web-app'
@@ -18,6 +8,7 @@ pipeline {
         DOCKER_CREDENTIALS_ID = 'docker-cred-id'  // Jenkins credentials ID
          // Add Git tag/commit environment variables
         NEW_TAG = ''
+        DEPLOY_ENV ='production'
     }
     
     stages {
