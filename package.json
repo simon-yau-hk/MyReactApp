@@ -5,6 +5,7 @@
   "dependencies": {
     "axios": "^1.7.9",
     "cra-template": "1.2.0",
+    "env-cmd": "^10.1.0",
     "http-proxy-middleware": "^3.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -14,7 +15,11 @@
   },
   "scripts": {
     "start": "react-app-rewired start",
+    "start:uat": "env-cmd -f .env.uat react-app-rewired start",
+    "start:production": "env-cmd -f .env.production react-app-rewired start",
     "build": "react-app-rewired build",
+    "build:uat": "env-cmd -f .env.uat react-app-rewired build",
+    "build:production": "env-cmd -f .env.production react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject"
   },

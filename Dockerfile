@@ -4,7 +4,11 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN npm run build
+
+# Declare your build argument
+ARG env
+
+RUN npm run build:${env}
  
 # Production Stage
 FROM nginx:stable-alpine

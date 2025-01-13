@@ -2,7 +2,8 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import Login from './pages/Login';
 import Landing from './pages/Landing';
-import logo from './logo.svg';
+import Version from './pages/Version';
+//import logo from './logo.svg';
 import './App.css';
 
 
@@ -23,6 +24,7 @@ function App() {
           />
           
           {/* Catch all other routes and redirect to root */}
+          <Route path="/version" element={<Version />}  />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </AuthProvider>

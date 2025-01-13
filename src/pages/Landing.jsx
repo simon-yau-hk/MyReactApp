@@ -1,5 +1,4 @@
-import { useContext, useEffect, useState, useRef } from 'react';
-import { AuthContext } from '~/context/AuthContext';
+import {  useEffect, useState, useRef } from 'react';
 import { loginApi, meetupApi } from '~/API';
 
 function Landing() {
@@ -7,7 +6,7 @@ function Landing() {
   const fetchRef = useRef(false); 
   useEffect(() => {
     console.log("data :",data);
-    if(fetchRef.current==false)
+    if(fetchRef.current===false)
     {
         fetchData();
         fetchRef.current = true;

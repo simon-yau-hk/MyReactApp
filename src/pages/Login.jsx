@@ -44,6 +44,8 @@ function Login() {
         </div>
         <button type="submit">Login</button>
       </form>
+
+      Enviornment: {process.env.REACT_APP_ENV}
     </div>
   );
 }
