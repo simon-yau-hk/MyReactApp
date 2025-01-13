@@ -1,6 +1,17 @@
 pipeline {
     agent any
-    
+        // Define parameters
+    properties([
+        parameters([
+            choice(
+                choices: ['development', 'uat', 'production'], 
+                name: 'DEPLOY_ENV',
+                defaultValue: 'production', 
+                description: 'Deploy environment'
+            )
+        ])
+    ])
+
     environment {
         DOCKER_IMAGE = 'my-web-app'
         DOCKER_USERNAME = 'simonyauwl'
@@ -97,7 +108,7 @@ pipeline {
             steps {
                 script {
                     // Build the Docker image
-                    sh 'docker build -t ${DOCKER_IMAGE} .'
+                    sh 'docker build: --build-arg env=${DEPLOY_ENV} -t ${DOCKER_IMAGE} .'
                 }
             }
         }
