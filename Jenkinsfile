@@ -108,7 +108,7 @@ pipeline {
             steps {
                 script {
                     // Tag with Git version
-                    sh "docker tag ${DOCKER_IMAGE} ${DOCKER_USERNAME}/${DOCKER_IMAGE}:${NEW_TAG}"
+                    sh "docker tag ${DOCKER_IMAGE} ${DOCKER_USERNAME}/${DOCKER_IMAGE}:${env.NEW_TAG}"
                     // Tag the Docker image
                     sh "docker tag ${DOCKER_IMAGE} ${DOCKER_USERNAME}/${DOCKER_IMAGE}"
                 }
@@ -119,7 +119,7 @@ pipeline {
             steps {
                 script {
                     // Push the tagged image to Docker Hub
-                    sh "docker push ${DOCKER_USERNAME}/${DOCKER_IMAGE}:${NEW_TAG}"
+                    sh "docker push ${DOCKER_USERNAME}/${DOCKER_IMAGE}:${env.NEW_TAG}"
                     sh "docker push  ${DOCKER_USERNAME}/${DOCKER_IMAGE}"
                 }
             }
@@ -129,7 +129,7 @@ pipeline {
         stage('Clean Up') {
             steps {
                 // Remove local Docker images
-                sh "docker rmi ${DOCKER_USERNAME}/${DOCKER_IMAGE}:${NEW_TAG}"
+                sh "docker rmi ${DOCKER_USERNAME}/${DOCKER_IMAGE}:${env.NEW_TAG}"
                 sh "docker rmi  ${DOCKER_USERNAME}/${DOCKER_IMAGE}:latest"
             }
         }
@@ -142,3 +142,4 @@ pipeline {
         }
     }
 }
+
