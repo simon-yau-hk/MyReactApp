@@ -6,8 +6,6 @@ pipeline {
         DOCKER_IMAGE = 'my-web-app'
         DOCKER_USERNAME = 'simonyauwl'
         DOCKER_CREDENTIALS_ID = 'docker-cred-id'  // Jenkins credentials ID
-         // Add Git tag/commit environment variables
-        NEW_TAG = ''
         DEPLOY_ENV ='production'
     }
     
@@ -69,6 +67,17 @@ pipeline {
                 }
             }
             
+        }
+
+        stage('Verify Tag') {
+            steps {
+                script {
+                    echo "Verifying NEW_TAG value: ${env.NEW_TAG}"
+                    if (!env.NEW_TAG) {
+                        error("NEW_TAG is not set!")
+                    }
+                }
+            }
         }
 
 
