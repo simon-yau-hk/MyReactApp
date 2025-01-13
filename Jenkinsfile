@@ -99,7 +99,7 @@ pipeline {
             steps {
                 script {
                     // Build the Docker image
-                    sh 'docker build: --build-arg env=${DEPLOY_ENV} -t ${DOCKER_IMAGE} .'
+                    sh 'docker build --build-arg env=${DEPLOY_ENV} -t ${DOCKER_IMAGE} .'
                 }
             }
         }
