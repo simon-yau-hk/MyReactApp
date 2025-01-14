@@ -1,0 +1,68 @@
+version: 0.2
+
+env:
+  variables:
+    DOCKER_IMAGE: "my-frontend"
+    DEPLOY_ENV: "production"
+  secrets-manager:
+    GITHUB_TOKEN: "github-credentials:token"
+    GITHUB_USERNAME: "github-credentials:username"
+
+phases:
+  install:
+    runtime-versions:
+      docker: 18
+
+  pre_build:
+    commands:
+      # Git configuration
+      - git config --global user.email "simon_yau@hotmail.com.hk"
+      - git config --global user.name "$GITHUB_USERNAME"
+      
+      # Fetch tags and create new version
+      - git fetch --tags
+      - LATEST_TAG=$(git describe --tags --abbrev=0)
+      - |
+        # List all tags and get the last one
+        LATEST_TAG=$(git tag -l | sort -V | tail -n1)
+        if [ -z "$LATEST_TAG" ]; then
+          LATEST_TAG="v0.0.0"
+        fi
+        echo "Latest tag found: $LATEST_TAG"
+        
+        # Parse version and create new tag
+        IFS='.' read -r MAJOR MINOR PATCH << EOF
+        $(echo ${LATEST_TAG#v})
+        EOF
+        NEW_PATCH=$((PATCH + 1))
+        NEW_TAG="v$MAJOR.$MINOR.$NEW_PATCH"
+        echo "New tag will be: $NEW_TAG"
+
+      # Create and push new tag
+      - git tag $NEW_TAG
+      - git push https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@github.com/${GITHUB_REPO} $NEW_TAG
+      
+      # Create version.json
+      - echo "{\"version\": \"$NEW_TAG\"}" > src/version.json
+      
+    
+      # ECR login (using AWS CLI v2)
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+
+
+  build:
+    commands:
+      # Build Docker image
+      - docker build --build-arg env=$DEPLOY_ENV -t $DOCKER_IMAGE .
+      - docker tag $DOCKER_IMAGE $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$DOCKER_IMAGE:$NEW_TAG
+      - docker tag $DOCKER_IMAGE $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$DOCKER_IMAGE:latest
+
+  post_build:
+    commands:
+         # Push Docker images to ECR
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$DOCKER_IMAGE:$NEW_TAG
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$DOCKER_IMAGE:latest
+     
+cache:
+  paths:
+    - '/root/.docker/**/*' 
