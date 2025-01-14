@@ -5,11 +5,11 @@ env:
     DOCKER_IMAGE: "my-frontend"
     DEPLOY_ENV: "production"
     GITHUB_REPO: "simon-yau-hk/MyReactApp"  # Add this line with your repo name
-    AWS_ACCOUNT_ID: "mySecret1:MY_AWS_ACCOUNT_ID"
-    AWS_DEFAULT_REGION: "mySecret1:MY_AWS_REGION"
   secrets-manager:
     GITHUB_TOKEN: "github-credentials:token"
     GITHUB_USERNAME: "github-credentials:username"
+    AWS_ACCOUNT_ID: "mySecret1:MY_AWS_ACCOUNT_ID"
+    AWS_DEFAULT_REGION: "mySecret1:MY_AWS_REGION"
 
 phases:
   install:
