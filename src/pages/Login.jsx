@@ -20,6 +20,10 @@ function Login() {
     }
   };
 
+  const checkVersion = async () => {
+    navigate('/version');
+  }
+
   return (
     <div className="login-container">
       <form onSubmit={handleSubmit}>
@@ -45,6 +49,7 @@ function Login() {
         <button type="submit">Login</button>
       </form>
 
+      <button onClick={(e) => checkVersion()}>check version</button>
       Enviornment: {process.env.REACT_APP_ENV}
     </div>
   );
