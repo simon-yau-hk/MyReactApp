@@ -4,6 +4,7 @@ env:
   variables:
     DOCKER_IMAGE: "my-frontend"
     DEPLOY_ENV: "production"
+    GITHUB_REPO: "simon-yau-hk/MyReactApp"  # Add this line with your repo name
   secrets-manager:
     GITHUB_TOKEN: "github-credentials:token"
     GITHUB_USERNAME: "github-credentials:username"
