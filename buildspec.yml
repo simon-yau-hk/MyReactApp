@@ -15,34 +15,19 @@ phases:
 
   pre_build:
     commands:
-      # Git configuration
       - git config --global user.email "simon_yau@hotmail.com.hk"
       - git config --global user.name "$GITHUB_USERNAME"
-      
-      # Fetch tags and create new version
       - git fetch --tags
       - "LATEST_TAG=$(git tag -l | sort -V | tail -n1 || echo 'v0.0.0')"
-      - "echo Latest tag found: $LATEST_TAG"
-      - "IFS='.' read -r MAJOR MINOR PATCH <<< ${LATEST_TAG#v}"
+      - "echo Latest tag found $LATEST_TAG"
+      - "IFS='.' read -r MAJOR MINOR PATCH <<< \"${LATEST_TAG#v}\""
       - "NEW_PATCH=$((PATCH + 1))"
-      - "NEW_TAG=v$MAJOR.$MINOR.$NEW_PATCH"
-      - "echo New tag will be: $NEW_TAG"
-      - git tag $NEW_TAG
-      - git push https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@github.com/${GITHUB_REPO} $NEW_TAG
-      - echo "{\"version\": \"$NEW_TAG\"}" > src/version.json
-      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 855694456765.dkr.ecr.us-east-1.amazonaws.com
-
-
-      # Create and push new tag
-      - git tag $NEW_TAG
-      - git push https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@github.com/${GITHUB_REPO} $NEW_TAG
-      
-      # Create version.json
-      - echo "{\"version\": \"$NEW_TAG\"}" > src/version.json
-      
-    
-      # ECR login (using AWS CLI v2)
-      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      - "NEW_TAG=\"v$MAJOR.$MINOR.$NEW_PATCH\""
+      - "echo \"New tag will be $NEW_TAG\""
+      - "git tag \"$NEW_TAG\""
+      - "git push https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@github.com/${GITHUB_REPO} \"$NEW_TAG\""
+      - "echo \"{\\\"version\\\": \\\"$NEW_TAG\\\"}\" > src/version.json"
+      - "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com"
 
 
   build:
