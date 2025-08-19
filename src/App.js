@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import Login from './pages/Login';
+import GoolgeLogin from './pages/GoolgeLogin';
 import Landing from './pages/Landing';
 import Version from './pages/Version';
 //import logo from './logo.svg';
@@ -14,7 +15,7 @@ function App() {
         <Routes>
           {/* Public Route */}
           <Route path="/login" element={<Login />} />
-          
+          <Route path="/google-login" element={<GoolgeLogin />} />
           {/* Protected Route */}
           <Route
             path="/"

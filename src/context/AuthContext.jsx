@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
   }, [location.pathname]);
 
   const checkAuth = async () => {
-    if(location.pathname==="/version"){
+    if(location.pathname==="/version" || location.pathname==="/google-login"){
         return true;
     }
     const token = localStorage.getItem('token');
